@@ -97,7 +97,9 @@ class Producer:
         # TODO: Write cleanup code for the Producer here
         #
         #
-        logger.info("producer close incomplete - skipping")
+        if self.producer is not None:
+            logger.debug("flushing producer.")
+            self.producer.flush()
 
     def time_millis(self):
         """Use this function to get the key for Kafka Events"""
