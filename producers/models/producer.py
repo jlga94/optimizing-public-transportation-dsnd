@@ -38,9 +38,8 @@ class Producer:
         #
         #
         self.broker_properties = {
-            # TODO
-            # TODO
-            # TODO
+            "bootstrap.servers": "PLAINTEXT://localhost:9092",
+            "schema.registry.url": "http://localhost:8081"
         }
 
         # If the topic does not already exist, try to create it
@@ -49,8 +48,11 @@ class Producer:
             Producer.existing_topics.add(self.topic_name)
 
         # TODO: Configure the AvroProducer
-        # self.producer = AvroProducer(
-        # )
+        self.producer = AvroProducer(
+            self.broker_properties,
+            default_key_schema=self.key_schema,
+            default_value_schema=self.value_schema
+        )
 
     def create_topic(self):
         """Creates the producer topic if it does not already exist"""
@@ -60,10 +62,33 @@ class Producer:
         # the Kafka Broker.
         #
         #
-        logger.info("topic creation kafka integration incomplete - skipping")
+        client = AdminClient(
+            {
+                "bootstrap.servers": self.broker_properties["bootstrap.servers"]
+            }
+        )
 
-    def time_millis(self):
-        return int(round(time.time() * 1000))
+        topic_metadata = client.list_topics(timeout=5)
+
+        if self.topic_name not in set(t.topic for t in iter(topic_metadata.topics.values())):
+            futures = client.create_topics(
+                [
+                    NewTopic(
+                        topic=self.topic_name,
+                        num_partitions=self.num_partitions,
+                        replication_factor=self.num_replicas
+                    )
+                ]
+            )
+
+            for topic, future in futures.items():
+                try:
+                    future.result()
+                    logger.info("topic created")
+                except Exception as e:
+                    logger.error(f"failed to create topic {self.topic_name}", e)
+        else:
+            logger.info("topic is already created")
 
     def close(self):
         """Prepares the producer for exit by cleaning up the producer"""
