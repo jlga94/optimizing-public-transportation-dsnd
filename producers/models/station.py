@@ -74,7 +74,7 @@ class Station(Producer):
                "prev_direction": prev_direction
            },
         )
-        logger.info("message produced")
+        logger.info("station message produced")
 
     def __str__(self):
         return "Station | {:^5} | {:<30} | Direction A: | {:^5} | departing to {:<30} | Direction B: | {:^5} | departing to {:<30} | ".format(

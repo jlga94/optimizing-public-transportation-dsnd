@@ -67,4 +67,4 @@ class Turnstile(Producer):
                     "line": self.station.color.name
                 },
             )
-            logger.info("message produced")
+            logger.info("turnstile message produced")
