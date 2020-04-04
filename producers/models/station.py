@@ -37,7 +37,7 @@ class Station(Producer):
         # replicas
         #
         #
-        topic_name = f"{station_name}" # TODO: Come up with a better topic name
+        topic_name = f"com.udacity.{station_name}" # TODO: Come up with a better topic name
         super().__init__(
             topic_name,
             key_schema=Station.key_schema,
@@ -70,8 +70,8 @@ class Station(Producer):
                "direction": direction,
                "line": self.color.name,
                "train_status": train.status.name,
-               "prev_station_id": prev_station_id,
-               "prev_direction": prev_direction
+               "prev_station_id": prev_station_id or -1,
+               "prev_direction": prev_direction or ""
            },
         )
         logger.info("station message produced")

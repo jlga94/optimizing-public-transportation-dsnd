@@ -25,11 +25,13 @@
     },
     {
       "name": "prev_station_id",
-      "type": ["null","int"]
+      "type": "int",
+      "default": null
     },
     {
       "name": "prev_direction",
-      "type": ["null","string"]
+      "type": "string",
+      "default": null
     }
   ]
 }
