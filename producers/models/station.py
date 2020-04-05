@@ -27,7 +27,7 @@ class Station(Producer):
             .replace("'", "")
         )
 
-        topic_name = f"org.chicago.cta.station.arrivals.{station_name}" # TODO: Come up with a better topic name
+        topic_name = f"org.chicago.cta.station.arrivals.{station_name}"
         super().__init__(
             topic_name,
             key_schema=Station.key_schema,
@@ -63,14 +63,16 @@ class Station(Producer):
         logger.info("station message produced")
 
     def __str__(self):
-        return "Station | {:^5} | {:<30} | Direction A: | {:^5} | departing to {:<30} | Direction B: | {:^5} | departing to {:<30} | ".format(
-            self.station_id,
-            self.name,
-            self.a_train.train_id if self.a_train is not None else "---",
-            self.dir_a.name if self.dir_a is not None else "---",
-            self.b_train.train_id if self.b_train is not None else "---",
-            self.dir_b.name if self.dir_b is not None else "---",
-        )
+        return "Station | {:^5} | {:<30} | Direction A: | {:^5} | departing to {:<30} " \
+               "| Direction B: | {:^5} | departing to {:<30} | "\
+                .format(
+                    self.station_id,
+                    self.name,
+                    self.a_train.train_id if self.a_train is not None else "---",
+                    self.dir_a.name if self.dir_a is not None else "---",
+                    self.b_train.train_id if self.b_train is not None else "---",
+                    self.dir_b.name if self.dir_b is not None else "---",
+                )
 
     def __repr__(self):
         return str(self)

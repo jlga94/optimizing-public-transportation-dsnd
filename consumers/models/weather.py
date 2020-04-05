@@ -16,6 +16,6 @@ class Weather:
     def process_message(self, message):
         """Handles incoming weather data"""
         data = json.loads(message.value())
-        self.temperature = data["temperature"]
-        self.status = data["status"]
+        self.temperature = data.get("temperature")
+        self.status = data.get("status")
         logger.info("weather process_message was processed")

@@ -2,7 +2,6 @@
 import logging
 import time
 
-
 from confluent_kafka import avro
 from confluent_kafka.admin import AdminClient, NewTopic
 from confluent_kafka.avro import AvroProducer
@@ -31,12 +30,6 @@ class Producer:
         self.num_partitions = num_partitions
         self.num_replicas = num_replicas
 
-        #
-        #
-        # TODO: Configure the broker properties below. Make sure to reference the project README
-        # and use the Host URL for Kafka and Schema Registry!
-        #
-        #
         self.broker_properties = {
             "bootstrap.servers": "PLAINTEXT://localhost:9092",
             "schema.registry.url": "http://localhost:8081"
@@ -47,7 +40,6 @@ class Producer:
             self.create_topic()
             Producer.existing_topics.add(self.topic_name)
 
-        # TODO: Configure the AvroProducer
         self.producer = AvroProducer(
             self.broker_properties,
             default_key_schema=self.key_schema,
@@ -56,12 +48,6 @@ class Producer:
 
     def create_topic(self):
         """Creates the producer topic if it does not already exist"""
-        #
-        #
-        # TODO: Write code that creates the topic for this producer if it does not already exist on
-        # the Kafka Broker.
-        #
-        #
         client = AdminClient(
             {
                 "bootstrap.servers": self.broker_properties["bootstrap.servers"]
@@ -92,11 +78,6 @@ class Producer:
 
     def close(self):
         """Prepares the producer for exit by cleaning up the producer"""
-        #
-        #
-        # TODO: Write cleanup code for the Producer here
-        #
-        #
         if self.producer is not None:
             logger.debug("flushing producer.")
             self.producer.flush()

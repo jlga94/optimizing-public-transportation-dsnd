@@ -46,7 +46,7 @@ def run_server():
             "Ensure that the KSQL Command has run successfully before running the web server!"
         )
         exit(1)
-    if topic_check.topic_exists("org.chicago.cta.stations.table.v1") is False:
+    if topic_check.topic_exists("org.chicago.cta.stations.output") is False:
         logger.fatal(
             "Ensure that Faust Streaming is running successfully before running the web server!"
         )
@@ -63,18 +63,18 @@ def run_server():
     # Build kafka consumers
     consumers = [
         KafkaConsumer(
-            "org.chicago.cta.weather.v1",
+            "org.chicago.cta.weather",
             weather_model.process_message,
             offset_earliest=True,
         ),
         KafkaConsumer(
-            "org.chicago.cta.stations.table.v1",
+            "org.chicago.cta.stations.output",
             lines.process_message,
             offset_earliest=True,
             is_avro=False,
         ),
         KafkaConsumer(
-            "^org.chicago.cta.station.arrivals.",
+            "^org.chicago.cta.station.arrivals.*",
             lines.process_message,
             offset_earliest=True,
         ),

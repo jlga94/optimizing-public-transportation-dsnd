@@ -30,14 +30,8 @@ class Weather(Producer):
     summer_months = set((6, 7, 8))
 
     def __init__(self, month):
-        #
-        #
-        # TODO: Complete the below by deciding on a topic name, number of partitions, and number of
-        # replicas
-        #
-        #
         super().__init__(
-            "com.udacity.weather", # TODO: Come up with a better topic name
+            "org.chicago.cta.weather",
             key_schema=Weather.key_schema,
             value_schema=Weather.value_schema,
             num_partitions=3,
@@ -72,12 +66,6 @@ class Weather(Producer):
     def run(self, month):
         self._set_weather(month)
 
-        #
-        #
-        # TODO: Complete the function by posting a weather event to REST Proxy. Make sure to
-        # specify the Avro schemas and verify that you are using the correct Content-Type header.
-        #
-        #
         url = f"{Weather.rest_proxy_url}/topics/{self.topic_name}"
 
         headers = {"Content-Type": "application/vnd.kafka.avro.v2+json"}
