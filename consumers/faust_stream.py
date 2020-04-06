@@ -34,8 +34,8 @@ topic = app.topic("org.chicago.cta.stations", value_type=Station)
 out_topic = app.topic("org.chicago.cta.stations.table", partitions=1)
 
 table = app.Table(
-   "stations-output",
-   default=list,
+   "stations-table-transformed",
+   default=TransformedStation,
    partitions=1,
    changelog_topic=out_topic,
 )
@@ -44,12 +44,14 @@ table = app.Table(
 @app.agent(topic)
 async def faust_stream(stations):
     async for station in stations:
-        table['station_id'] = {
-            'station_id': station.station_id,
-            'station_name': station.station_name,
-            'order': station.order,
-            'line': get_color(station)
-        }
+        transformed_station = TransformedStation(
+            station_id=station.station_id,
+            station_name=station.station_name,
+            order=station.order,
+            line=get_color(station)
+        )
+
+        table[transformed_station.station_id] = transformed_station
 
 
 def get_color(station):
